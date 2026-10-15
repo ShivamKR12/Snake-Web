@@ -1,3 +1,4 @@
+import asyncio
 import pygame, sys, random
 from pygame.math import Vector2
 import os
@@ -239,77 +240,83 @@ class MAIN:
 # preinitialize the pygame mixer so that the crunch sound play at the right timer
 # pygame.mixer.pre_init(4410, -16, 2, 512) # BUG : preinitialization is messing with the sounds !!!
 # initialize pygame
-pygame.init()
-# set the title of the pygame window to be the name of the game
-pygame.display.set_caption("Snake")
-# create a display surface aka a screen
-screen = pygame.display.set_mode((CELL_NUMBER * CELL_SIZE, CELL_NUMBER * CELL_SIZE))
-# create a clock object to control the amount of time the game updates
-clock = pygame.time.Clock()
-apple = pygame.image.load(resource_path('Graphics/apple.png')).convert_alpha()
-game_font = pygame.font.Font(resource_path('Font/PoetsenOne-Regular.ttf'), 25)
-# set the apple as the icon for the pygame window
-pygame.display.set_icon(apple)
-
-
-SCREEN_UPDATE = pygame.USEREVENT # a user defined pygame event
-# set the timer to update the screen every 150 milliseconds
-pygame.time.set_timer(SCREEN_UPDATE, 150)
-
-
-# create an instance of the main class
-main_game = MAIN()
-
-
-# create a while loop to run the game logic
-while True:
-    # get all the events
-    for event in pygame.event.get():
-        # if we want to quit the game by pressing the X icon on the top right corner of the pyagme window
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit() # sys.exit() is because pygame.quit() may sometimes fail or not completely work !
-        if event.type == SCREEN_UPDATE:
-            main_game.update()
-        # if the event is a keyboard button press
-        if event.type == pygame.KEYDOWN:
-            # if the button pressed is the up arrow key
-            if event.key == pygame.K_UP:
-                # check if we are not moving downward, otherwise it's impossible to move up when going down
-                if main_game.snake.direction.y != 1:
-                    # change the snake's direction to be up
-                    main_game.snake.direction = Vector2(0, -1)
-            # if the button pressed is the right arrow key
-            if event.key == pygame.K_RIGHT:
-                # check if we are not moving leftward, otherwise it's impossible to move right when going left
-                if main_game.snake.direction.x != -1:
-                    # change the snake's direction to be right
-                    main_game.snake.direction = Vector2(1, 0)
-            # if the button pressed is the down arrow key
-            if event.key == pygame.K_DOWN:
-                # check if we are not moving upward, otherwise it's impossible to move down when going up
-                if main_game.snake.direction.y != -1:
-                    # change the snake's direction to be down
-                    main_game.snake.direction = Vector2(0, 1)
-            # if the button pressed is the left arrow key
-            if event.key == pygame.K_LEFT:
-                # check if we are not moving rightward, otherwise it's impossible to move left when going right
-                if main_game.snake.direction.x != 1:
-                    # change the snake's direction to be left
-                    main_game.snake.direction = Vector2(-1, 0)
+async def main():
+    global screen, clock, apple, game_font
+    pygame.init()
+    # set the title of the pygame window to be the name of the game
+    pygame.display.set_caption("Snake")
+    # create a display surface aka a screen
+    screen = pygame.display.set_mode((CELL_NUMBER * CELL_SIZE, CELL_NUMBER * CELL_SIZE))
+    # create a clock object to control the amount of time the game updates
+    clock = pygame.time.Clock()
+    apple = pygame.image.load(resource_path('Graphics/apple.png')).convert_alpha()
+    game_font = pygame.font.Font(resource_path('Font/PoetsenOne-Regular.ttf'), 25)
+    # set the apple as the icon for the pygame window
+    pygame.display.set_icon(apple)
     
-    # fill the screen with a color so that we can differentiate it from the rest of the objects
-    # to do so, we can use fill() function of the pygame display window/surface
-    # we can pass in the colors in 2 different ways :
-    # 1. RGB tuple : aka a tuple with 3 values, (R,G,B), each going from 0 to 255, where 0 = 0% and 255 = 100%
-    # 2. Color object : so we write pygame.Color('a predefined color name')
-    screen.fill((175, 215, 70))
+    
+    SCREEN_UPDATE = pygame.USEREVENT # a user defined pygame event
+    # set the timer to update the screen every 150 milliseconds
+    pygame.time.set_timer(SCREEN_UPDATE, 150)
+    
+    
+    # create an instance of the main class
+    main_game = MAIN()
+    
+    
+    # create a while loop to run the game logic
+    while True:
+        # get all the events
+        for event in pygame.event.get():
+            # if we want to quit the game by pressing the X icon on the top right corner of the pyagme window
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit() # sys.exit() is because pygame.quit() may sometimes fail or not completely work !
+            if event.type == SCREEN_UPDATE:
+                main_game.update()
+            # if the event is a keyboard button press
+            if event.type == pygame.KEYDOWN:
+                # if the button pressed is the up arrow key
+                if event.key == pygame.K_UP:
+                    # check if we are not moving downward, otherwise it's impossible to move up when going down
+                    if main_game.snake.direction.y != 1:
+                        # change the snake's direction to be up
+                        main_game.snake.direction = Vector2(0, -1)
+                # if the button pressed is the right arrow key
+                if event.key == pygame.K_RIGHT:
+                    # check if we are not moving leftward, otherwise it's impossible to move right when going left
+                    if main_game.snake.direction.x != -1:
+                        # change the snake's direction to be right
+                        main_game.snake.direction = Vector2(1, 0)
+                # if the button pressed is the down arrow key
+                if event.key == pygame.K_DOWN:
+                    # check if we are not moving upward, otherwise it's impossible to move down when going up
+                    if main_game.snake.direction.y != -1:
+                        # change the snake's direction to be down
+                        main_game.snake.direction = Vector2(0, 1)
+                # if the button pressed is the left arrow key
+                if event.key == pygame.K_LEFT:
+                    # check if we are not moving rightward, otherwise it's impossible to move left when going right
+                    if main_game.snake.direction.x != 1:
+                        # change the snake's direction to be left
+                        main_game.snake.direction = Vector2(-1, 0)
+    
+        # fill the screen with a color so that we can differentiate it from the rest of the objects
+        # to do so, we can use fill() function of the pygame display window/surface
+        # we can pass in the colors in 2 different ways :
+        # 1. RGB tuple : aka a tuple with 3 values, (R,G,B), each going from 0 to 255, where 0 = 0% and 255 = 100%
+        # 2. Color object : so we write pygame.Color('a predefined color name')
+        screen.fill((175, 215, 70))
 
-    # draw all the elements on to the screen
-    main_game.draw_elements()
+        # draw all the elements on to the screen
+        main_game.draw_elements()
 
-    # update the display
-    pygame.display.update()
+        # update the display
+        pygame.display.update()
 
-    # set the framerate of the game window
-    clock.tick(FRAMERATE)
+        # set the framerate of the game window
+        clock.tick(FRAMERATE)
+        await asyncio.sleep(0)
+
+if __name__ == "__main__":
+    asyncio.run(main())

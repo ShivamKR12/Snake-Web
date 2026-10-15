@@ -1,76 +1,26 @@
-# 🐍 Snake 
+# Snake (Web Edition)
 
-A classic Snake game built with **Python** and **Pygame**.
+A classic Snake arcade game built with Python and Pygame-CE. Eat apples to grow longer while avoiding walls and yourself.
 
-## 🎮 Features
+Playable locally and in modern web browsers via WebAssembly ([Pygbag](https://pygame-web.github.io/)).
 
-* Grid-based movement
-* Sound effects
-* Score tracking
-* Custom graphics & font
-* Packaged executable support (PyInstaller)
+## How to Run Locally
 
----
+### Prerequisites
+- Python 3.10+
+- `pip install pygame-ce pygbag`
 
-## 📦 Requirements
-
-* Python 3.x
-* Pygame
-
-Install dependencies:
-
-```bash
-pip install pygame
-```
-
----
-
-## ▶️ Run the Game
-
+### Play Locally
 ```bash
 python main.py
 ```
 
-Use the arrow keys to move the snake.
-
----
-
-## 🛠 Build Executable
-
-This project includes a PyInstaller spec file.
-
-Install PyInstaller:
-
+### Run in Browser Locally
 ```bash
-pip install pyinstaller
+python -m pygbag main.py
 ```
+Open `http://localhost:8000` in your web browser.
 
-Build:
-
-```bash
-pyinstaller main.spec
-```
-
-The executable will be inside the `dist/` folder.
-
----
-
-## 📁 Project Structure
-
-```
-Snake/
-│── main.py
-│── main.spec
-│── Graphics/
-│── Sound/
-│── Font/
-│── screenshot/
-```
-
----
-
-## 📸 Screenshots
-
-![0](screenshot/0.png)
-![1](screenshot/1.png)
-![2](screenshot/2.png)
+## Controls
+- **Arrow Keys** or **WASD**: Change snake direction
+- **Escape**: Quit game
